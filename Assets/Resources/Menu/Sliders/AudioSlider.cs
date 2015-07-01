@@ -13,6 +13,7 @@ public class AudioSlider : MonoBehaviour
 	
 	void Update ()
 	{
-		AudioListener.volume = volume.value;
+        GameManager._instance.Volume = volume.value;
+        AudioListener.volume = volume.value;
 	}
 }

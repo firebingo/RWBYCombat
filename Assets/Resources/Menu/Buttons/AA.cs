@@ -14,7 +14,8 @@ public class AA : MonoBehaviour
 		b = GetComponent<Button>();
 		if (QualitySettings.antiAliasing == 2 || QualitySettings.antiAliasing == 8 || QualitySettings.antiAliasing == 4)
 		{
-			QualitySettings.antiAliasing = 4;
+            GameManager._instance.AAEnabled = true;
+            GameManager._instance.refreshQuality = true;
 			Enabled = true;
 			cb = b.colors;
 			cb.normalColor = Color.green;
@@ -40,7 +41,8 @@ public class AA : MonoBehaviour
 			cb.normalColor = Color.red;
 			cb.highlightedColor = Color.red - new Color(0.3f, 0.3f, 0.3f, 0.0f);
 			b.colors = cb;
-			QualitySettings.antiAliasing = 0;
+            GameManager._instance.AAEnabled = false;
+            GameManager._instance.refreshQuality = true;
 		}
 		else
 		{
@@ -49,7 +51,8 @@ public class AA : MonoBehaviour
 			cb.normalColor = Color.green;
 			cb.highlightedColor = Color.green - new Color(0.3f, 0.3f, 0.3f, 0.0f);
 			b.colors = cb;
-			QualitySettings.antiAliasing = 4;
+            GameManager._instance.AAEnabled = true;
+            GameManager._instance.refreshQuality = true;
 		}
 	}
 }

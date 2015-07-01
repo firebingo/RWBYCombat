@@ -38,7 +38,8 @@ public class VSync : MonoBehaviour
 			cb.normalColor = Color.red;
 			cb.highlightedColor = Color.red - new Color(0.3f, 0.3f, 0.3f, 0.0f);
 			b.colors = cb;
-			QualitySettings.vSyncCount = 0;
+            GameManager._instance.VSync = false;
+            GameManager._instance.refreshQuality = true;
 		}
 		else
 		{
@@ -47,7 +48,8 @@ public class VSync : MonoBehaviour
 			cb.normalColor = Color.green;
 			cb.highlightedColor = Color.green - new Color(0.3f, 0.3f, 0.3f, 0.0f);
 			b.colors = cb;
-			QualitySettings.vSyncCount = 1;
+            GameManager._instance.VSync = true;
+            GameManager._instance.refreshQuality = true;
 		}
 	}
 }

@@ -42,7 +42,8 @@ public class FullScreen : MonoBehaviour
             cb.normalColor = Color.red;
             cb.highlightedColor = Color.red - new Color(0.3f, 0.3f, 0.3f, 0.0f);
             b.colors = cb;
-            Screen.SetResolution(width, height, false);
+            GameManager._instance.isFullscreen = false;
+            GameManager._instance.refreshQuality = true;
         } 
         else
         {
@@ -51,13 +52,8 @@ public class FullScreen : MonoBehaviour
             cb.normalColor = Color.green;
             cb.highlightedColor = Color.green - new Color(0.3f, 0.3f, 0.3f, 0.0f);
             b.colors = cb;
-            Screen.SetResolution(width, height, true);
+            GameManager._instance.isFullscreen = true;
+            GameManager._instance.refreshQuality = true;
         }
-    }
-
-    public void setRes(int width, int height)
-    {
-        this.width = width;
-        this.height = height;
     }
 }

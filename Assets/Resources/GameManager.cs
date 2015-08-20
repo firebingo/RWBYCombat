@@ -15,18 +15,18 @@ using System.Runtime.Serialization.Formatters.Binary;
 public class GameManager : MonoBehaviour
 {
 	public static GameManager _instance;
-    public static NetworkManager _networkInstance;
+    public static CNetworkManager _networkInstance;
 	 
 	//start variables
 	int playerID; //the ID of the client. Defaults to 0 which should be host id.
     public int characterID; //the ID of the character the client has selected.
-    string playerName;
+    public string playerName;
 
 	float time;
 	//end variables
 
     //Options Variables
-    public short Port;
+    public int Port;
     public bool VSync;
     public int wWidth;
     public int wHeight;
@@ -34,6 +34,9 @@ public class GameManager : MonoBehaviour
     public float Volume;
     public bool AAEnabled;
     public bool refreshQuality;
+
+    public GameObject mainMenuParent;
+    public GameObject lobbyParent;
 
     void Awake()
     {
@@ -48,7 +51,7 @@ public class GameManager : MonoBehaviour
         }
 
         if (!_networkInstance)
-            _networkInstance = FindObjectOfType<NetworkManager>();
+            _networkInstance = FindObjectOfType<CNetworkManager>();
 
         if (loadOptions())
             refreshQuality = true;
@@ -67,7 +70,8 @@ public class GameManager : MonoBehaviour
 	void Start()
 	{
 		time = 0;
-		playerID = 0; 
+		playerID = 0;
+        characterID = 0;
 	}
 
 	void Update()
@@ -152,7 +156,7 @@ public class GameManager : MonoBehaviour
 [Serializable]
 class GameOptions
 {
-    public GameOptions(short iPort, bool iVSync, int iWWidth, int iWHeight, bool iIsFullscreen,float iVolume, bool iAAEnabled)
+    public GameOptions(int iPort, bool iVSync, int iWWidth, int iWHeight, bool iIsFullscreen, float iVolume, bool iAAEnabled)
     {
         Port = iPort;
         VSync = iVSync;
@@ -163,7 +167,7 @@ class GameOptions
     }
 
     //Options
-    public short Port;
+    public int Port;
     public bool VSync;
     public int wWidth;
     public int wHeight;

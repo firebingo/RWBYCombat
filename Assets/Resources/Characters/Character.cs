@@ -3,9 +3,8 @@ using System.Collections;
 
 public abstract class Character : MonoBehaviour
 {
-
     int playerID; //ID of the player using this character.
-    int characterID; //ID of the character for chracter selection.
+    int characterID; //ID of the character for charcter selection.
         
     //Character stats
     float Health; //self-explained

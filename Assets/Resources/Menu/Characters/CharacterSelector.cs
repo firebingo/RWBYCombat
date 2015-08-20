@@ -5,14 +5,12 @@ using System.Collections.Generic;
 public class CharacterSelector : MonoBehaviour
 {
     public List<GameObject> characters; //the index of the characters in this list must match the character's ID in their script
-    GameManager Manager; //reference to the game manager.
     public int currentLocation; //the current index that is highlighted.
     public float time; //self-explained.
 
     void Start()
     {
         currentLocation = 0;
-        Manager = FindObjectOfType<GameManager>();
         //sets the index variable of all the characters in the list.
         for (int i = 0; i < characters.Count; ++i)
             characters [i].GetComponent<CharacterSelection>().index = i;
@@ -84,6 +82,6 @@ public class CharacterSelector : MonoBehaviour
     //sets the character selection id in the GameManager to be the selected character.
     public void setCharacter()
     {
-        Manager.characterID = currentLocation;
+        GameManager._instance.characterID = currentLocation;
     }
 }

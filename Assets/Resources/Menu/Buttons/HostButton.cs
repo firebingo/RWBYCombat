@@ -30,10 +30,10 @@ public class HostButton : MonoBehaviour
         int port = -1;
         port = int.Parse(portS);
 
-        if (port > 1 && port < 65534)
-            Manager.GetComponent<NetworkManager>().setPort(port);
-        else
-            Manager.GetComponent<NetworkManager>().setPort(25555);
+        //if (port > 1 && port < 65534)
+        //    Manager.GetComponent<NetworkManager>().setPort(port);
+        //else
+        //    Manager.GetComponent<NetworkManager>().setPort(25555);
     }
 
     public void setRoomName()
@@ -49,6 +49,6 @@ public class HostButton : MonoBehaviour
         else
             gameName = "Invalid";
 
-        Manager.GetComponent<NetworkManager>().setRoomName(gameName);
+        Manager.GetComponent<CNetworkManager>().setRoomName(gameName);
     }
 }

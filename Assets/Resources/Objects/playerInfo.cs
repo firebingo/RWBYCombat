@@ -2,24 +2,32 @@
 using UnityEngine.Networking;
 using System.Collections;
 
-public class playerInfo : MonoBehaviour
+public class playerInfo : NetworkBehaviour
 {
     [SerializeField]
+    [SyncVar]
     int characterID;
 
     [SerializeField]
+    [SyncVar]
     string playerName;
 
     // Use this for initialization
     void Start()
     {
-        playerName = GameManager._instance.playerName;
-        characterID = GameManager._instance.characterID;
+        CmdinitVars(GameManager._instance.playerName, GameManager._instance.characterID);
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    [Command]
+    void CmdinitVars(string pName, int pID)
+    {
+        playerName = pName;
+        characterID = pID;
     }
 }

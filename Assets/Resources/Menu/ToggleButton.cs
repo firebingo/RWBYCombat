@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
-public class ToggleButton : MonoBehaviour
+public class ToggleButton : NetworkBehaviour
 {
-    private bool isActive;
+    [SyncVar]
+    private bool isActive = false;
     [SerializeField]
     private int numberID;
     [SerializeField]
@@ -22,15 +24,31 @@ public class ToggleButton : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {  
+        if(isActive)
+        {
+            GetComponent<Image>().sprite = activeSprite;
+        }
+        else
+        {
+            GetComponent<Image>().sprite = inactiveSprite;
+        }
+    }
 
+    void OnVar(bool value)
+    {
+        Debug.LogError("Value Changed");
+        isActive = value;
     }
 
     //set the toggle buttons active state. Called by the button the script it attached to when it is pressed.
     public void setActive()
     {
+        if (!NetworkServer.active)
+            return;
+
         //if the toggle isint active.
-        if (isActive == false)
+        if (!isActive)
         {
             //only set it to be active if there are less than 2 toggles already active
             if (toggleController.getToggleCount() < 2)
@@ -38,16 +56,14 @@ public class ToggleButton : MonoBehaviour
                 isActive = true;
                 toggleController.addToggle(GetComponent<ToggleButton>());
                 toggleController.toggleUp();
-                GetComponent<Image>().sprite = activeSprite;
             }
         }
         //if the toggle is active.
-        else
+        else if (isActive)
         {
             isActive = false;
             toggleController.removeToggle(GetComponent<ToggleButton>());
             toggleController.toggleDown();
-            GetComponent<Image>().sprite = inactiveSprite;
         }
     }
 

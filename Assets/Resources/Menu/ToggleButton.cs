@@ -5,8 +5,8 @@ using UnityEngine.Networking;
 
 public class ToggleButton : NetworkBehaviour
 {
-    [SyncVar]
-    private bool isActive = false;
+    [SyncVar(hook="OnVar")]
+    private bool isBActive = false;
     [SerializeField]
     private int numberID;
     [SerializeField]
@@ -19,13 +19,13 @@ public class ToggleButton : NetworkBehaviour
     // Use this for initialization
     void Start()
     {
-        transform.GetChild(0).GetComponent<Text>().text = numberID.ToString();
+        
     }
 
     // Update is called once per frame
     void Update()
     {  
-        if(isActive)
+        if(isBActive)
         {
             GetComponent<Image>().sprite = activeSprite;
         }
@@ -33,12 +33,14 @@ public class ToggleButton : NetworkBehaviour
         {
             GetComponent<Image>().sprite = inactiveSprite;
         }
+
+        transform.GetChild(0).GetComponent<Text>().text = isBActive.ToString();
     }
 
     void OnVar(bool value)
     {
         Debug.LogError("Value Changed");
-        isActive = value;
+        isBActive = value;
     }
 
     //set the toggle buttons active state. Called by the button the script it attached to when it is pressed.
@@ -48,20 +50,20 @@ public class ToggleButton : NetworkBehaviour
             return;
 
         //if the toggle isint active.
-        if (!isActive)
+        if (!isBActive)
         {
             //only set it to be active if there are less than 2 toggles already active
             if (toggleController.getToggleCount() < 2)
             {
-                isActive = true;
+                isBActive = true;
                 toggleController.addToggle(GetComponent<ToggleButton>());
                 toggleController.toggleUp();
             }
         }
         //if the toggle is active.
-        else if (isActive)
+        else if (isBActive)
         {
-            isActive = false;
+            isBActive = false;
             toggleController.removeToggle(GetComponent<ToggleButton>());
             toggleController.toggleDown();
         }

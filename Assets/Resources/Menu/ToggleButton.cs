@@ -5,8 +5,8 @@ using UnityEngine.Networking;
 
 public class ToggleButton : NetworkBehaviour
 {
-    [SyncVar(hook="OnVar")]
-    private bool isBActive = false;
+    [SyncVar]
+    private bool isBActive;
     [SerializeField]
     private int numberID;
     [SerializeField]
@@ -15,11 +15,19 @@ public class ToggleButton : NetworkBehaviour
     private Sprite inactiveSprite;
     [SerializeField]
     private Sprite activeSprite;
+    [SyncVar]
+    private string playerName;
 
     // Use this for initialization
     void Start()
     {
-        
+        //if (NetworkServer.active)
+        //    NetworkServer.Spawn(this.gameObject);
+    }
+
+    override public void OnStartServer()
+    {
+        //NetworkServer.Spawn(this.gameObject);
     }
 
     // Update is called once per frame
@@ -34,13 +42,19 @@ public class ToggleButton : NetworkBehaviour
             GetComponent<Image>().sprite = inactiveSprite;
         }
 
-        transform.GetChild(0).GetComponent<Text>().text = isBActive.ToString();
-    }
+        transform.GetChild(0).GetComponent<Text>().text = numberID.ToString();
 
-    void OnVar(bool value)
-    {
-        Debug.LogError("Value Changed");
-        isBActive = value;
+        if (NetworkServer.active)
+        {
+            if (CNetworkManager._instance.connectedPlayers[numberID - 1] != null)
+                playerName = CNetworkManager._instance.connectedPlayers[numberID - 1].getPlayerName();
+            else
+                playerName = "empty";
+        }
+        if(playerName == "")
+        {
+            playerName = "empty";
+        }
     }
 
     //set the toggle buttons active state. Called by the button the script it attached to when it is pressed.
@@ -70,8 +84,13 @@ public class ToggleButton : NetworkBehaviour
     }
 
     //Getters and Setters
-    int getID()
+    public int getID()
     {
         return numberID;
+    }
+
+    public string getPlayerName()
+    {
+        return playerName;
     }
 }

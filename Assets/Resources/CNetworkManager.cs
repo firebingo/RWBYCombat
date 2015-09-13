@@ -2,9 +2,11 @@
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using System.Collections;
+using System.Collections.Generic;
 
-public class CNetworkManager : MonoBehaviour
+public class CNetworkManager : NetworkManager
 {
+    public static CNetworkManager _instance;
     private static string gameVersion = "Debug6";
     private static string gameName = "RWBY Combat Test";
 
@@ -13,13 +15,28 @@ public class CNetworkManager : MonoBehaviour
 
     int port;
     string roomName;
-    string[] playerNames;
     
-    void start()
+    public playerInfo[] connectedPlayers;
+
+    void Awake()
+    {
+        if (_instance == null)
+        {
+            DontDestroyOnLoad(this.gameObject);
+            _instance = this;
+        }
+        else if (_instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+    void Start()
     {
         serverRunning = false;
         port = 0;
-        playerNames = new string[NetworkManager.singleton.maxConnections];
+        connectedPlayers = new playerInfo[NetworkManager.singleton.maxConnections];
+        DontDestroyOnLoad(this);
     }
 
     public void startServer()
@@ -30,8 +47,9 @@ public class CNetworkManager : MonoBehaviour
         serverRunning = true;
         if (NetworkManager.singleton.isNetworkActive)
         {
-            GameManager._instance.mainMenuParent.SetActive(false);
-            GameManager._instance.lobbyParent.SetActive(true);
+            //    GameManager._instance.mainMenuParent.SetActive(false);
+            //    GameManager._instance.lobbyParent.SetActive(true);
+            //    GameManager._instance.gloadLevel("Lobby");
         }
         else
             closeServer();
@@ -49,6 +67,16 @@ public class CNetworkManager : MonoBehaviour
         }
         else
             closeServer();
+    }
+
+    public override void OnServerRemovePlayer(NetworkConnection conn, PlayerController player)
+    {
+        for (int i = 0; i < connectedPlayers.Length; ++i)
+        {
+            if(player.gameObject.GetComponent<playerInfo>() == connectedPlayers[i])
+                connectedPlayers[i] = null;
+        }
+        NetworkManager.singleton.OnServerRemovePlayer(conn, player);
     }
 
     public void setPort(Text iPort)

@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     public static CNetworkManager _networkInstance;
 	 
 	//start variables
-	int playerID; //the ID of the client. Defaults to 0 which should be host id.
+	public int playerID; //the ID of the client. Defaults to 0 which should be host id.
     public int characterID; //the ID of the character the client has selected.
     public string playerName;
 
@@ -32,7 +32,6 @@ public class GameManager : MonoBehaviour
     public int wHeight;
     public bool isFullscreen;
     public float Volume;
-    public bool AAEnabled;
     public bool refreshQuality;
 
     public GameObject mainMenuParent;
@@ -72,24 +71,30 @@ public class GameManager : MonoBehaviour
 		time = 0;
 		playerID = 0;
         characterID = 0;
-	}
+        playerName = "\"Good Name\"";
+    }
 
 	void Update()
 	{
 		time += Time.deltaTime;
 
-        if(refreshQuality)
+        if (refreshQuality)
         {
             updateQuality();
         }
-	}
+    }
+
+    public void gloadLevel(string iName)
+    {
+        Application.LoadLevel(iName);
+    }
 
     public void setPlayerName(Text iName)
     {
-        if(iName.text.ToString() == "")
-            playerName = "Good Name";
+        if (iName.text == "")
+            playerName = "\"Good Name\"";
         else
-            playerName = iName.text.ToString();
+            playerName = iName.text;
     }
 
     public void updateQuality()
@@ -98,11 +103,6 @@ public class GameManager : MonoBehaviour
             QualitySettings.vSyncCount = 1;
         else
             QualitySettings.vSyncCount = 0;
-
-        if(AAEnabled)
-            QualitySettings.antiAliasing = 4;
-        else
-            QualitySettings.antiAliasing = 0;
 
         if (isFullscreen)
             Screen.SetResolution(wWidth, wHeight, true);
@@ -119,9 +119,9 @@ public class GameManager : MonoBehaviour
     private void saveOptions()
     {
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Open(Application.dataPath + "/gameOptions.ini", FileMode.OpenOrCreate);
+        FileStream file = File.Open(Application.dataPath + "/gameOptions.wort", FileMode.OpenOrCreate);
 
-        GameOptions options = new GameOptions(Port, VSync, wWidth, wHeight, isFullscreen, Volume, AAEnabled);
+        GameOptions options = new GameOptions(Port, VSync, wWidth, wHeight, isFullscreen, Volume);
 
         bf.Serialize(file, options);
         file.Close();
@@ -130,10 +130,10 @@ public class GameManager : MonoBehaviour
     //loads the game options from a file if it exists.
     private bool loadOptions()
     {
-        if (File.Exists(Application.dataPath + "/gameOptions.ini"))
+        if (File.Exists(Application.dataPath + "/gameOptions.wort"))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.dataPath + "/gameOptions.ini", FileMode.Open);
+            FileStream file = File.Open(Application.dataPath + "/gameOptions.wort", FileMode.Open);
             GameOptions options = bf.Deserialize(file) as GameOptions;
             file.Close();
 
@@ -143,7 +143,6 @@ public class GameManager : MonoBehaviour
             wHeight = options.wHeight;
             isFullscreen = options.isFullscreen;
             Volume = options.Volume;
-            AAEnabled = options.AAEnabled;
             
             return true;
         }
@@ -156,14 +155,13 @@ public class GameManager : MonoBehaviour
 [Serializable]
 class GameOptions
 {
-    public GameOptions(int iPort, bool iVSync, int iWWidth, int iWHeight, bool iIsFullscreen, float iVolume, bool iAAEnabled)
+    public GameOptions(int iPort, bool iVSync, int iWWidth, int iWHeight, bool iIsFullscreen, float iVolume)
     {
         Port = iPort;
         VSync = iVSync;
         wWidth = iWWidth;
         wHeight = iWHeight;
         Volume = iVolume;
-        AAEnabled = iAAEnabled;
     }
 
     //Options
@@ -173,5 +171,4 @@ class GameOptions
     public int wHeight;
     public bool isFullscreen;
     public float Volume;
-    public bool AAEnabled;
 }

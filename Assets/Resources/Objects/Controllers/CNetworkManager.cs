@@ -45,13 +45,7 @@ public class CNetworkManager : NetworkManager
         NetworkManager.singleton.networkPort = GameManager._instance.Port;
         NetworkManager.singleton.StartHost();
         serverRunning = true;
-        if (NetworkManager.singleton.isNetworkActive)
-        {
-            //    GameManager._instance.mainMenuParent.SetActive(false);
-            //    GameManager._instance.lobbyParent.SetActive(true);
-            //    GameManager._instance.gloadLevel("Lobby");
-        }
-        else
+        if (!NetworkManager.singleton.isNetworkActive)
             closeServer();
     }
 
@@ -60,17 +54,18 @@ public class CNetworkManager : NetworkManager
         NetworkManager.singleton.networkAddress = ipInput.text.ToString();
         NetworkManager.singleton.networkPort = GameManager._instance.Port;
         NetworkManager.singleton.StartClient();
-        if (NetworkManager.singleton.isNetworkActive)
-        {
-            GameManager._instance.mainMenuParent.SetActive(false);
-            GameManager._instance.lobbyParent.SetActive(true);
-        }
-        else
+        if (!NetworkManager.singleton.isNetworkActive)
             closeServer();
+    }
+
+    public void gLoadNetLevel(string iName)
+    {
+        NetworkManager.singleton.ServerChangeScene(iName);
     }
 
     public override void OnServerRemovePlayer(NetworkConnection conn, PlayerController player)
     {
+        Debug.Log("Client Disconnected");
         for (int i = 0; i < connectedPlayers.Length; ++i)
         {
             if(player.gameObject.GetComponent<playerInfo>() == connectedPlayers[i])

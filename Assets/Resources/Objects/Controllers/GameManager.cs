@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 using System;
 using System.IO;
 using System.Collections;
@@ -33,9 +34,6 @@ public class GameManager : MonoBehaviour
     public bool isFullscreen;
     public float Volume;
     public bool refreshQuality;
-
-    public GameObject mainMenuParent;
-    public GameObject lobbyParent;
 
     void Awake()
     {
@@ -86,7 +84,10 @@ public class GameManager : MonoBehaviour
 
     public void gloadLevel(string iName)
     {
-        Application.LoadLevel(iName);
+        if (NetworkManager.singleton.isNetworkActive)
+            CNetworkManager._instance.gLoadNetLevel(iName);
+        else
+            Application.LoadLevel(iName);
     }
 
     public void setPlayerName(Text iName)

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 
@@ -67,7 +66,7 @@ public class ToggleButton : NetworkBehaviour
         if (!isBActive)
         {
             //only set it to be active if there are less than 2 toggles already active
-            if (toggleController.getToggleCount() < 2)
+            if (toggleController.getToggleCount() < 2 && CNetworkManager._instance.connectedPlayers[numberID-1])
             {
                 isBActive = true;
                 toggleController.addToggle(GetComponent<ToggleButton>());

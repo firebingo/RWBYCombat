@@ -3,8 +3,6 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using System;
 using System.IO;
-using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 
 //Currently this class does not have any specific functionatly other than creating a manager object and preventing more from being created.

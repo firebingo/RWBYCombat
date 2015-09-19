@@ -15,9 +15,13 @@ public class playerInfo : NetworkBehaviour
     [SerializeField]
     int playerID;
 
+    [SyncVar]
+    bool isPlayer;
+
     // Use this for initialization
     void Start()
     {
+        DontDestroyOnLoad(this.gameObject);
         CmdinitVars(GameManager._instance.playerName, GameManager._instance.characterID);
         if (NetworkServer.active)
         {
@@ -61,5 +65,20 @@ public class playerInfo : NetworkBehaviour
     public string getPlayerName()
     {
         return playerName;
+    }
+
+    public int getPlayerID()
+    {
+        return playerID;
+    }
+
+    public bool getIsPlayer()
+    {
+        return isPlayer;
+    }
+
+    public void setIsPlayer(bool iIs)
+    {
+        isPlayer = iIs;
     }
 }

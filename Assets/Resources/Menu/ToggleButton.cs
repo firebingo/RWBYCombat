@@ -17,22 +17,10 @@ public class ToggleButton : NetworkBehaviour
     [SyncVar]
     private string playerName;
 
-    // Use this for initialization
-    void Start()
-    {
-        //if (NetworkServer.active)
-        //    NetworkServer.Spawn(this.gameObject);
-    }
-
-    override public void OnStartServer()
-    {
-        //NetworkServer.Spawn(this.gameObject);
-    }
-
     // Update is called once per frame
     void Update()
-    {  
-        if(isBActive)
+    {
+        if (isBActive)
         {
             GetComponent<Image>().sprite = activeSprite;
         }
@@ -50,7 +38,7 @@ public class ToggleButton : NetworkBehaviour
             else
                 playerName = "empty";
         }
-        if(playerName == "")
+        if (playerName == "")
         {
             playerName = "empty";
         }
@@ -66,11 +54,15 @@ public class ToggleButton : NetworkBehaviour
         if (!isBActive)
         {
             //only set it to be active if there are less than 2 toggles already active
-            if (toggleController.getToggleCount() < 2 && CNetworkManager._instance.connectedPlayers[numberID-1])
+            if (toggleController.getToggleCount() < 2 && CNetworkManager._instance.connectedPlayers[numberID - 1])
             {
                 isBActive = true;
                 toggleController.addToggle(GetComponent<ToggleButton>());
                 toggleController.toggleUp();
+                if (toggleController.getToggleCount() == 1)
+                    CNetworkManager._instance.setPlayerID(1, numberID-1);
+                else if (toggleController.getToggleCount() == 2)
+                    CNetworkManager._instance.setPlayerID(2, numberID-1);
             }
         }
         //if the toggle is active.

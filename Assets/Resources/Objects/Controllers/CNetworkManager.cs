@@ -1,20 +1,19 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
-using System.Collections;
-using System.Collections.Generic;
 
-public class CNetworkManager : NetworkManager
+public class CNetworkManager : MonoBehaviour//NetworkManager
 {
     public static CNetworkManager _instance;
     private static string gameVersion = "Debug6";
     private static string gameName = "RWBY Combat Test";
 
     public Text ipInput;
-    public bool serverRunning;
+    bool serverRunning;
 
     int port;
-    string roomName;
+    int player1ID;
+    int player2ID;
     
     public playerInfo[] connectedPlayers;
 
@@ -26,9 +25,7 @@ public class CNetworkManager : NetworkManager
             _instance = this;
         }
         else if (_instance != this)
-        {
             Destroy(this.gameObject);
-        }
     }
 
     void Start()
@@ -63,15 +60,49 @@ public class CNetworkManager : NetworkManager
         NetworkManager.singleton.ServerChangeScene(iName);
     }
 
-    public override void OnServerRemovePlayer(NetworkConnection conn, PlayerController player)
+    //public override void OnServerRemovePlayer(NetworkConnection conn, PlayerController player)
+    //{
+    //    Debug.Log("Client Disconnected");
+    //    for (int i = 0; i < connectedPlayers.Length; ++i)
+    //    {
+    //        if(player.gameObject.GetComponent<playerInfo>() == connectedPlayers[i])
+    //            connectedPlayers[i] = null;
+    //    }
+    //    NetworkManager.singleton.OnServerRemovePlayer(conn, player);
+    //}
+
+    public void closeServer()
     {
-        Debug.Log("Client Disconnected");
-        for (int i = 0; i < connectedPlayers.Length; ++i)
+        if (serverRunning)
         {
-            if(player.gameObject.GetComponent<playerInfo>() == connectedPlayers[i])
-                connectedPlayers[i] = null;
+            NetworkManager.singleton.StopServer();
+            NetworkManager.singleton.StopHost();
+            serverRunning = false;
         }
-        NetworkManager.singleton.OnServerRemovePlayer(conn, player);
+        else
+            NetworkManager.singleton.StopClient();
+    }
+
+    //getters and setters
+    public bool getServerRunning()
+    {
+        return serverRunning;
+    }
+
+    public int getPlayerID(int i)
+    {
+        if (i == 1)
+            return player1ID;
+        else
+            return player2ID;
+    }
+
+    public void setPlayerID(int i, int iID)
+    {
+        if (i == 1)
+            player1ID = iID;
+        else
+            player2ID = iID;
     }
 
     public void setPort(Text iPort)
@@ -85,22 +116,5 @@ public class CNetworkManager : NetworkManager
 
         GameManager._instance.Port = port;
         GameManager._instance.refreshQuality = true;
-    }
-
-    public void setRoomName(string iName)
-    {
-        roomName = iName;
-    }
-
-    public void closeServer()
-    {
-        if (serverRunning)
-        {
-            NetworkManager.singleton.StopServer();
-            NetworkManager.singleton.StopHost();
-            serverRunning = false;
-        }
-        else
-            NetworkManager.singleton.StopClient();
     }
 }

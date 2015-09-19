@@ -34,4 +34,9 @@ public class lobbyStart : MonoBehaviour
             sButton.enabled = false;
         }
     }
+
+    public void onBClick()
+    {
+        GameManager._instance.gloadLevel("Game");
+    }
 }

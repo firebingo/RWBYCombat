@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using System;
+using System.Linq;
 
 public class lobbyStart : MonoBehaviour
 {
@@ -37,6 +39,17 @@ public class lobbyStart : MonoBehaviour
 
     public void onBClick()
     {
+        for(int i = 0; i < CNetworkManager._instance.connectedPlayers.Length;++i)
+        {
+            if(CNetworkManager._instance.connectedPlayers[i])
+            {
+                //if the character id for a player is set to 0/random assign it a random value.
+                if(CNetworkManager._instance.connectedPlayers[i].getCharacterID() == 0)
+                {
+                    CNetworkManager._instance.connectedPlayers[i].setCharacterID(UnityEngine.Random.Range(1, (int)(Enum.GetValues(typeof(GameManager.characterNames)).Cast<GameManager.characterNames>().Max())));
+                }
+            }
+        }
         GameManager._instance.gloadLevel("Game");
     }
 }

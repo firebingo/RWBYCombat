@@ -5,6 +5,7 @@ using System.Collections;
 public class playerInfo : NetworkBehaviour
 {
     [SerializeField]
+    [SyncVar]
     int characterID;
 
     [SyncVar]
@@ -15,6 +16,7 @@ public class playerInfo : NetworkBehaviour
     [SerializeField]
     int playerID;
 
+    [SerializeField]
     [SyncVar]
     bool isPlayer;
 
@@ -80,5 +82,15 @@ public class playerInfo : NetworkBehaviour
     public void setIsPlayer(bool iIs)
     {
         isPlayer = iIs;
+    }
+
+    public int getCharacterID()
+    {
+        return characterID;
+    }
+
+    public void setCharacterID(int iID)
+    {
+        characterID = iID;
     }
 }

@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
 	public int playerID; //the ID of the client. Defaults to 0 which should be host id.
     public int characterID; //the ID of the character the client has selected.
     public string playerName;
+    
 
 	float time;
 	//end variables
@@ -32,6 +33,14 @@ public class GameManager : MonoBehaviour
     public bool isFullscreen;
     public float Volume;
     public bool refreshQuality;
+
+    //Global Enums
+    public enum characterNames:int
+    {
+        Random,
+        Ruby,
+        Yang
+    }
 
     void Awake()
     {

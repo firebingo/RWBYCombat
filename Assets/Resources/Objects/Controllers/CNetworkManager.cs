@@ -12,7 +12,9 @@ public class CNetworkManager : MonoBehaviour//NetworkManager
     bool serverRunning;
 
     int port;
+    [SerializeField]
     int player1ID;
+    [SerializeField]
     int player2ID;
     
     public playerInfo[] connectedPlayers;

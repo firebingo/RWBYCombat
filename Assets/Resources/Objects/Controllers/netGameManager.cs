@@ -39,10 +39,10 @@ public class netGameManager : NetworkBehaviour
         }
 
         nameText[] names = FindObjectsOfType<nameText>();
-        for (int i = 0; i < names.Length; ++i)
-        {
-            names[i].setUpdated(false);
-        }
+        //for (int i = 0; i < names.Length; ++i)
+        //{
+        //    names[i].setUpdated(false);
+        //}
     }
 
     // Update is called once per frame

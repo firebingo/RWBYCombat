@@ -1,5 +1,6 @@
 ﻿using UnityEngine.Networking;
 using UnityEngine;
+using System.Collections;
 
 public class netGameManager : NetworkBehaviour
 {
@@ -11,6 +12,27 @@ public class netGameManager : NetworkBehaviour
     [SyncVar]
     [SerializeField]
     int player2ID;
+
+    [SyncVar]
+    int battlePhase;
+
+    [SyncVar]
+    int battleTurn;
+
+    [SyncVar]
+    int player1Position;
+    [SyncVar]
+    int player2Position;
+
+    [SyncVar]
+    int player1Action;
+    [SyncVar]
+    int player2Action;
+
+    [SerializeField]
+    characterObject player1Character;
+    [SerializeField]
+    characterObject player2Character;
 
     void Awake()
     {
@@ -38,17 +60,35 @@ public class netGameManager : NetworkBehaviour
             }
         }
 
-        nameText[] names = FindObjectsOfType<nameText>();
+        player1Position = 0;
+        player2Position = 4;
+        battlePhase = 1;
+        battleTurn = 1;
+
+        //StartCoroutine(updateCycle());
+
+        //nameText[] names = FindObjectsOfType<nameText>();
         //for (int i = 0; i < names.Length; ++i)
         //{
         //    names[i].setUpdated(false);
         //}
     }
 
+    public void setupGame()
+    {
+
+    }
+
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    IEnumerator updateCycle()
+    {
+        yield return new WaitForSeconds(2.0f);
+        setupGame();
     }
 
     //getters and setters
@@ -58,5 +98,13 @@ public class netGameManager : NetworkBehaviour
             return player1ID;
         else
             return player2ID;
+    }
+
+    public void setCharacterObject(int id, characterObject iChar)
+    {
+        if (id == player1ID)
+            player1Character = iChar;
+        else if (id == player2ID)
+            player2Character = iChar;
     }
 }

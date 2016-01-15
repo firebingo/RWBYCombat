@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using gameEnums;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class characterText : MonoBehaviour
@@ -13,10 +14,10 @@ public class characterText : MonoBehaviour
 
             switch (temp)
             {
-                case (int)GameManager.characterNames.Ruby:
+                case (int)characterNames.Ruby:
                     this.GetComponent<Text>().text = "Ruby";
                     break;
-                case (int)GameManager.characterNames.Yang:
+                case (int)characterNames.Yang:
                     this.GetComponent<Text>().text = "Yang";
                     break;
                 default:

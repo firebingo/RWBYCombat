@@ -1,28 +1,37 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class UIPlayerInfo : MonoBehaviour
+public class characterObject : MonoBehaviour
 {
     [SerializeField]
     playerInfo uiPlayer; //reference to the object to pull the info for display from.
     [SerializeField]
     int number;
 
+    Character gameCharacter;
+
+    SpriteRenderer characterSprite;
+
+    int animationID;
+
     // Use this for initialization
     void Start()
     {
         StartCoroutine(updateCycle());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        characterSprite = this.GetComponent<SpriteRenderer>();
     }
 
     void Initialize()
     {
         findPlayerInfo();
+        setPlayerSprite();
+        netGameManager._instance.setCharacterObject(uiPlayer.getPlayerID(), this);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
     }
 
     void findPlayerInfo()
@@ -49,14 +58,25 @@ public class UIPlayerInfo : MonoBehaviour
         }
     }
 
+    void setPlayerSprite()
+    {
+        switch (uiPlayer.getCharacterID())
+        {
+            case 1:
+                characterSprite.sprite = GameManager._instance.chracterSprites[1];
+            break;
+            case 2:
+                characterSprite.sprite = GameManager._instance.chracterSprites[2];
+            break;
+        }
+
+        if (!characterSprite.sprite)
+            characterSprite.sprite = GameManager._instance.chracterSprites[0];
+    }
+
     IEnumerator updateCycle()
     {
         yield return new WaitForSeconds(2.0f);
         Initialize();
-    }
-
-    public playerInfo getPlayer()
-    {
-        return uiPlayer;
     }
 }

@@ -4,11 +4,15 @@ using UnityEngine.Networking;
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.Generic;
+using gameEnums;
+using System.Linq;
+using UnityEngine.SceneManagement;
 
-//Currently this class does not have any specific functionatly other than creating a manager object and preventing more from being created.
+//Currently this class does not have any specific functionally other than creating a manager object and preventing more from being created.
 
 //The purpose of this as a class though is that it can basically store global information that can be accessed and will
-//stay persistant while the application is running, even through scene transitions. This can also be extended as a way 
+//stay persistent while the application is running, even through scene transitions. This can also be extended as a way 
 //to save/load the game between restarts of the application.
 
 public class GameManager : MonoBehaviour
@@ -20,11 +24,9 @@ public class GameManager : MonoBehaviour
 	public int playerID; //the ID of the client. Defaults to 0 which should be host id.
     public int characterID; //the ID of the character the client has selected.
     public string playerName;
-    
-
-	float time;
-	//end variables
-
+    public List<Sprite> chracterSprites = new List<Sprite>();
+    float time;
+	
     //Options Variables
     public int Port;
     public bool VSync;
@@ -33,14 +35,7 @@ public class GameManager : MonoBehaviour
     public bool isFullscreen;
     public float Volume;
     public bool refreshQuality;
-
-    //Global Enums
-    public enum characterNames:int
-    {
-        Random,
-        Ruby,
-        Yang
-    }
+    //end variables
 
     void Awake()
     {
@@ -77,6 +72,19 @@ public class GameManager : MonoBehaviour
 		playerID = 0;
         characterID = 0;
         playerName = "\"Good Name\"";
+
+        //automatically loads character sprites into a list.
+        for (int i = 0; i < (int)(Enum.GetValues(typeof(characterNames)).Cast<characterNames>().Max() + 1); ++i)
+        {
+            //String resourceString = "Characters/Sprites/" + Enum.Parse(typeof(characterNames), i.ToString());
+
+            Sprite temp = Resources.Load<Sprite>("Characters/Sprites/" + Enum.Parse(typeof(characterNames), i.ToString()));
+
+            if (temp != null)
+                chracterSprites.Add(temp);
+            else
+                Debug.LogError("invalid character sprite: " + i);
+        }
     }
 
 	void Update()
@@ -92,9 +100,12 @@ public class GameManager : MonoBehaviour
     public void gloadLevel(string iName)
     {
         if (NetworkManager.singleton.isNetworkActive)
+        {
+            SceneManager.LoadScene(iName); //have the host load the scene first.
             CNetworkManager._instance.gLoadNetLevel(iName);
+        }
         else
-            Application.LoadLevel(iName);
+            SceneManager.LoadScene(iName);
     }
 
     public void setPlayerName(Text iName)
@@ -179,4 +190,24 @@ class GameOptions
     public int wHeight;
     public bool isFullscreen;
     public float Volume;
+}
+
+namespace gameEnums
+{
+    public enum characterNames : int
+    {
+        Random,
+        Ruby,
+        Yang
+    }
+
+    public enum turnActions : int
+    {
+        Defend,
+        Stance,
+        Move,
+        Attack,
+        Semblance,
+        Skip
+    }
 }

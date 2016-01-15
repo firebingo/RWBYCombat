@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using System;
 using System.Linq;
+using gameEnums;
 
 public class lobbyStart : MonoBehaviour
 {
@@ -46,7 +47,7 @@ public class lobbyStart : MonoBehaviour
                 //if the character id for a player is set to 0/random assign it a random value.
                 if(CNetworkManager._instance.connectedPlayers[i].getCharacterID() == 0)
                 {
-                    CNetworkManager._instance.connectedPlayers[i].setCharacterID(UnityEngine.Random.Range(1, (int)(Enum.GetValues(typeof(GameManager.characterNames)).Cast<GameManager.characterNames>().Max())));
+                    CNetworkManager._instance.connectedPlayers[i].setCharacterID(UnityEngine.Random.Range(1, (int)(Enum.GetValues(typeof(characterNames)).Cast<characterNames>().Max()) + 1));
                 }
             }
         }

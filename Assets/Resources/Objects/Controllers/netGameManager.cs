@@ -34,6 +34,9 @@ public class netGameManager : NetworkBehaviour
     [SerializeField]
     characterObject player2Character;
 
+    [SyncVar]
+    int randomSeed;
+
     void Awake()
     {
         if (_instance == null)
@@ -46,6 +49,8 @@ public class netGameManager : NetworkBehaviour
 
         player1ID = CNetworkManager._instance.getPlayerID(1);
         player2ID = CNetworkManager._instance.getPlayerID(2);
+
+        randomSeed = Time.frameCount;
     }
 
     // Use this for initialization
@@ -106,5 +111,15 @@ public class netGameManager : NetworkBehaviour
             player1Character = iChar;
         else if (id == player2ID)
             player2Character = iChar;
+    }
+
+    public int getRandomSeed()
+    {
+        return randomSeed;
+    }
+
+    public void iterateSeed(int i)
+    {
+        randomSeed += i;
     }
 }

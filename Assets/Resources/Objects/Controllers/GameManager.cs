@@ -17,16 +17,16 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-	public static GameManager _instance;
+    public static GameManager _instance;
     public static CNetworkManager _networkInstance;
-	 
-	//start variables
-	public int playerID; //the ID of the client. Defaults to 0 which should be host id.
+
+    //start variables
+    public int playerID; //the ID of the client. Defaults to 0 which should be host id.
     public int characterID; //the ID of the character the client has selected.
     public string playerName;
     public List<Sprite> chracterSprites = new List<Sprite>();
     float time;
-	
+
     //Options Variables
     public int Port;
     public bool VSync;
@@ -66,10 +66,10 @@ public class GameManager : MonoBehaviour
         saveOptions();
     }
 
-	void Start()
-	{
-		time = 0;
-		playerID = 0;
+    void Start()
+    {
+        time = 0;
+        playerID = 0;
         characterID = 0;
         playerName = "\"Good Name\"";
 
@@ -87,9 +87,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-	void Update()
-	{
-		time += Time.deltaTime;
+    void Update()
+    {
+        time += Time.deltaTime;
 
         if (refreshQuality)
         {
@@ -162,7 +162,7 @@ public class GameManager : MonoBehaviour
             wHeight = options.wHeight;
             isFullscreen = options.isFullscreen;
             Volume = options.Volume;
-            
+
             return true;
         }
         else
@@ -204,7 +204,6 @@ namespace gameEnums
     public enum turnActions : int
     {
         Defend,
-        Stance,
         Move,
         Attack,
         Semblance,

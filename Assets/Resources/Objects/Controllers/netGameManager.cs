@@ -28,6 +28,13 @@ public class netGameManager : NetworkBehaviour
     int player1Action;
     [SyncVar]
     int player2Action;
+    [SyncVar]
+    int player1MoveSpaces;
+    [SyncVar]
+    int player2MoveSpaces;
+
+    [SyncVar]
+    int actionsReady;
 
     [SerializeField]
     characterObject player1Character;
@@ -36,6 +43,8 @@ public class netGameManager : NetworkBehaviour
 
     [SyncVar]
     int randomSeed;
+
+    bool turnRunning;
 
     void Awake()
     {
@@ -56,12 +65,15 @@ public class netGameManager : NetworkBehaviour
     // Use this for initialization
     void Start()
     {
-        for (int i = 0; i < CNetworkManager._instance.connectedPlayers.Length; ++i)
+        foreach (var player in CNetworkManager._instance.connectedPlayers)
         {
-            if (CNetworkManager._instance.connectedPlayers[i])
+            if (player)
             {
-                if (CNetworkManager._instance.connectedPlayers[i].getPlayerID() == player1ID || CNetworkManager._instance.connectedPlayers[i].getPlayerID() == player2ID)
-                    CNetworkManager._instance.connectedPlayers[i].setIsPlayer(true);
+                if (player.getPlayerID() == player1ID || player.getPlayerID() == player2ID)
+                    player.setIsPlayer(true);
+
+                if (player.getPlayerName() == GameManager._instance.playerName)
+                    GameManager._instance.playerID = player.getPlayerID();
             }
         }
 
@@ -69,6 +81,7 @@ public class netGameManager : NetworkBehaviour
         player2Position = 4;
         battlePhase = 1;
         battleTurn = 1;
+        actionsReady = 0;
 
         //StartCoroutine(updateCycle());
 
@@ -87,13 +100,52 @@ public class netGameManager : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (actionsReady == 2)
+            StartCoroutine(doWaitThenTurn());
+    }
 
+    public void iterateSeed(int i)
+    {
+        randomSeed += i;
+    }
+
+    public void doTurn()
+    {
+        Character player1GameCharacter = player1Character.getCharacter();
+        Character player2GameCharacter = player2Character.getCharacter();
+
+        if (player1GameCharacter.getSpeed() > player2GameCharacter.getSpeed())
+        {
+            StartCoroutine(player1Turn());
+            turnRunning = true;
+        }
+        else
+        {
+            StartCoroutine(player2Turn());
+            turnRunning = true;
+        }
+    }
+
+    IEnumerator player1Turn()
+    {
+        yield return new WaitForSeconds(2.0f);
+    }
+
+    IEnumerator player2Turn()
+    {
+        yield return new WaitForSeconds(2.0f);
     }
 
     IEnumerator updateCycle()
     {
         yield return new WaitForSeconds(2.0f);
         setupGame();
+    }
+
+    IEnumerator doWaitThenTurn()
+    {
+        yield return new WaitForSeconds(0.5f);
+        doTurn();
     }
 
     //getters and setters
@@ -105,6 +157,11 @@ public class netGameManager : NetworkBehaviour
             return player2ID;
     }
 
+    public int getRandomSeed()
+    {
+        return randomSeed;
+    }
+
     public void setCharacterObject(int id, characterObject iChar)
     {
         if (id == player1ID)
@@ -113,13 +170,26 @@ public class netGameManager : NetworkBehaviour
             player2Character = iChar;
     }
 
-    public int getRandomSeed()
+    [Command]
+    public void CmdsetPlayerAction(int player, int iAction)
     {
-        return randomSeed;
+        if (player == 1)
+            player1Action = iAction;
+        else
+            player2Action = iAction;
     }
 
-    public void iterateSeed(int i)
+    [Command]
+    public void CmdsetPlayerMove(int player, int iMove)
     {
-        randomSeed += i;
+        if (player == 1)
+            player1MoveSpaces = iMove;
+        else                   
+            player2MoveSpaces = iMove;
+    }
+
+    public void addActionsReady(int i)
+    {
+        actionsReady += i;
     }
 }

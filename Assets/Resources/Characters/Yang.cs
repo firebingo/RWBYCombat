@@ -1,29 +1,31 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-public class Ruby : Character
+class Yang : Character
 {
     // Use this for initialization
     protected override void Start()
     {
         playerID = 0;
-        characterID = (int)gameEnums.characterNames.Ruby;
+        characterID = (int)gameEnums.characterNames.Yang;
 
-        Health = 500;
-        Defense = 15;
-        Melee = 90;
-        Ranged = 110;
-        Spirit = 15;
-        fullEndurance = 300;
+        Health = 650;
+        Defense = 25;
+        Melee = 110;
+        Ranged = 80;
+        Spirit = 9;
+        fullEndurance = 450;
         Endurance = fullEndurance;
         pastEndurance = 0;
-        Dodge = 9;
-        fullSpeed = 11;
+        Dodge = 4;
+        fullSpeed = 6;
         Speed = fullSpeed;
 
-        movementPenalty = 20;
+        movementPenalty = 25;
 
-        canUseSemblence = true;
+        canUseSemblence = false;
         semblenceActive = false;
         semblenceTurns = 0;
 
@@ -52,8 +54,7 @@ public class Ruby : Character
 
     public override void activeSemblence()
     {
-        fMoveSpaces = 4;
-        bMoveSpaces = 4;
+        
     }
 
     protected override void endSemblence()

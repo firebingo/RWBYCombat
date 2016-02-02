@@ -74,6 +74,15 @@ public class characterObject : MonoBehaviour
             characterSprite.sprite = GameManager._instance.chracterSprites[0];
     }
 
+    public Character getCharacter()
+    {
+        if (gameCharacter)
+            return gameCharacter;
+        else
+            return null;
+
+    }
+
     IEnumerator updateCycle()
     {
         yield return new WaitForSeconds(2.0f);
